@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Task</title>
+    <script src="https://kit.fontawesome.com/d7bc18a32d.js" crossorigin="anonymous"></script>
+    <style>
+        #container {
+            border: 1px solid black;
+            width: 70%;
+            margin: auto;
+            padding: 10px;
+            background-color: sandybrown;
+        }
+
+        #container>div {
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+
+        #task_btn {
+            width: 90px;
+            border-radius: 10px;
+            padding: 3px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        #sub {
+            width: 70px;
+            border-radius: 10px;
+            padding: 3px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #inp {
+            width: 150px;
+            border-radius: 7px;
+        }
+        th,td {
+            border: 1px solid black;
+            padding: 7px;
+            border-radius: 10px;
+        }
+        #toggle {
+            border: 1px solid black;
+            width: 70px;
+            height: 30px;
+            padding: 10px;
+            border-radius: 10px;
+            padding: 2px;
+            margin-left: 4px;
+            margin-top: 5px;
+            cursor: pointer;
+            background-color: rgb(243, 168, 103);
+        }
+        #toggle:hover {
+            background-color: turquoise;
+            height: 31px;
+        }
+        #remove {
+            border: 1px solid black;
+            width: 70px;
+            height: 30px;
+            padding: 10px;
+            border-radius: 10px;
+            padding: 2px;
+            margin-left: 4px;
+            margin-top: 5px;
+            cursor: pointer;
+            background-color: sandybrown;
+        }
+        #done {
+            border: 1px solid black;
+            width: 70px;
+            height: 30px;
+            padding: 10px;
+            border-radius: 10px;
+            padding: 2px;
+            margin-left: 4px;
+            margin-top: 5px;
+            cursor: pointer;
+            background-color: sandybrown;
+        }
+
+        #done:hover {
+            background-color: rgb(14, 170, 14);
+        }
+
+        #remove:hover {
+            background-color: rgb(223, 16, 16);
+        }
+        #main_head {
+            border: 1px solid black;
+            width: 72%;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            background-color: sandybrown;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main_head">
+        <h1>Task manager</h1>
+        <h2 id="no_of_task">No of task</h2>
+    </div>
+    <div id="container">
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Creation Date</th>
+                        <th>Status</th>
+                        <th>Toggle</th>
+                        <th>Task_Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <!-- 
+
+
+        <div>
+            this div contain the adding task functionality
+            new task like that
+
+            new task
+        </div> -->
+
+    </div>
+
+</body>
+
+</html>
+<script>
+
+    let arr = JSON.parse(localStorage.getItem('to_do')) || [];
+    console.log(arr);
+    display(arr);
+    //this code consists of the show the element in the table for
+    function display(arr) {
+        console.log("In the function call", arr);
+        let tbody = document.querySelector('tbody');
+        tbody.textContent = "";
+        console.log(arr.length);
+        if (arr.length == 0) {
+            document.getElementById('no_of_task').innerHTML = 'Good all task is finish';
+        } else {
+            document.getElementById('no_of_task').innerHTML = `${arr.length}  Task is remaining`;
+        }
+        arr.forEach(function (ele, index) {
+            let toggle = document.createElement('button');
+            toggle.textContent = "Toggle";
+            toggle.setAttribute('id', 'toggle');
+            toggle.value = 'false';
+
+            //This is all for the remove and done
+
+            let do_re = document.createElement('div');
+            let done = document.createElement('button');
+            done.textContent = "Done";
+            done.setAttribute('id', 'done');
+            let remove = document.createElement('button');
+            remove.textContent = "Remove";
+            remove.setAttribute('id', 'remove');
+            do_re.append(done, remove);
+            remove.addEventListener('click', function () {
+                arr.splice(index, 1);
+                localStorage.setItem('to_do', JSON.stringify(arr));
+                display(arr);
+
+            })
+            toggle.addEventListener('click', function () {
+                if (ele.status == true)
+                    ele.status = false;
+                else if (ele.status == false)
+                    ele.status = true;
+                display(arr);
+            })
+
+            let row = document.createElement('tr');
+            done.addEventListener('click', function () {
+                row.style.backgroundColor = "green";
+                toggle.style.backgroundColor = "green";
+                done.style.backgroundColor = "green";
+                remove.style.backgroundColor = "green";
+                row.style.textDecoration = "line-through";
+            })
+
+            let td1 = document.createElement('td');
+            td1.textContent = ele.task;
+            let td2 = document.createElement('td');
+            td2.textContent = ele.date;
+            let td3 = document.createElement('td');
+            td3.textContent = ele.status;
+            let td4 = document.createElement('td');
+            td4.append(toggle);
+            let td5 = document.createElement('td');
+            td5.append(do_re);
+            row.append(td1, td2, td3, td4, td5);
+            tbody.append(row);
+        })
+    }
+    // this entire code consist of create button for the new task
+
+    let div2 = document.createElement('div');
+    let task = document.createElement('button');
+    task.id = "task_btn";
+    task.textContent = "New Task";
+
+    //this is code for the input task
+    let input = document.createElement('input');
+    input.type = "text";
+    input.placeholder = "Enter task here";
+    input.id = "inp";
+
+    //This code for the submit button
+    var add = document.createElement('button');
+    add.textContent = "Submit";
+    add.id = 'sub';
+
+    //This is for the space
+    div2.append(task, input, add);
+    document.querySelector("#container").append(div2);
+    //This code hide the input box and submit button once we click on task button it will be show to us
+    document.getElementById("inp").style.display = "none";
+    document.getElementById("sub").style.display = "none";
+
+    document.querySelector("#task_btn").addEventListener('click', function () {
+        //After clicking on the btn it will show the input box for task and submit
+        document.getElementById("inp").style.display = "block";
+        document.getElementById("sub").style.display = "block";
+        //This is the event occur when user click on the submit btn
+        document.querySelector("#sub").addEventListener("click", function () {
+            let task_value = document.getElementById("inp").value;
+            function task(task) {
+                let bag = "";
+                this.task = task;
+                let date = new Date();
+                date = date.toString();
+                for (let i = 0; i < date.length; i++) {
+                    if (date[i] == 'G')
+                        break;
+                    else {
+                        bag = bag + date[i];
+                    }
+                }
+                this.date = bag;
+                this.status = false;
+            }
+            let obj = new task(task_value);
+            arr.push(obj);
+            console.log("add the task succesfully")
+            display(arr);
+            localStorage.setItem('to_do', JSON.stringify(arr));
+            location.reload();
+        })
+    })
+</script>
