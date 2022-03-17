@@ -1,4 +1,5 @@
 # Task_manager
+<h2>About</h2>
 This is the mini project in which you can add your task.
 This is assignment in unit 3 using the Js. 
 You can also change the status of your task.
